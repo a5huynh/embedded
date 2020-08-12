@@ -31,15 +31,17 @@ const int KEY_MATRIX[3][3] = {
     { KEY_PLUS1, KEY_CLEAR, KEY_EXTRA }
 };
 
+int SCAN_DELAY_MS = 20;
+
 /// True if the key is down, false otherwise.
 bool KEY_STATE[3][3];
 bool HAS_PRESSED = false;
 int LAST_DICE_ROLL = -1;
 
-const int ROW_PINS[] = {2, 4, 6};
+const int ROW_PINS[] = {12, 11, 10};
 const int NUM_ROWS = sizeof(ROW_PINS) / sizeof(ROW_PINS[0]);
 
-const int COL_PINS[] = {10, 12};
+const int COL_PINS[] = {6, 5, 4};
 const int NUM_COLS = sizeof(COL_PINS) / sizeof(COL_PINS[0]);
 
 void initializeDisplay() {
@@ -61,8 +63,7 @@ void initializeMatrix() {
     }
 
     for(int i = 0; i < NUM_COLS; i++) {
-        pinMode(COL_PINS[i], OUTPUT);
-        digitalWrite(COL_PINS[i], LOW);
+        pinMode(COL_PINS[i], INPUT);
     }
 
     // initialize keyboard state
@@ -119,12 +120,15 @@ void loop() {
 
     for(int col = 0; col < NUM_COLS; col++) {
         // Select column
+        pinMode(COL_PINS[col], OUTPUT);
         digitalWrite(COL_PINS[col], HIGH);
         // Check each row
         Serial.println("read row state");
         readRowState(col);
         digitalWrite(COL_PINS[col], LOW);
-        delay(50);
+        pinMode(COL_PINS[col], INPUT);
+        // Delay next scan
+        delay(SCAN_DELAY_MS);
     }
 
     Serial.println("drawing state");
