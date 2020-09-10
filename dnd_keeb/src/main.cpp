@@ -3,46 +3,23 @@
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
 
-/// Display configuration
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
+#include "constants.h"
+#include "icons.h"
+
+#include "screens/debug.h"
+#include "screens/home.h"
+#include "screens/roll.h"
 
 #define OLED_RESET -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-/// Keyboard configuration
-enum KEYS {
-    KEY_D4,
-    KEY_D6,
-    KEY_D8,
-    KEY_D10,
-    KEY_D12,
-    KEY_D20,
-    KEY_PLUS1,
-    KEY_CLEAR,
-    KEY_EXTRA
-};
-
-
-// keyed by: [row][col]
-const int KEY_MATRIX[3][3] = {
-    { KEY_D4, KEY_D6, KEY_D8 },
-    { KEY_D10, KEY_D12, KEY_D20 },
-    { KEY_PLUS1, KEY_CLEAR, KEY_EXTRA }
-};
+int CURRENT_SCREEN = SCREEN_HOME;
 
 int SCAN_DELAY_MS = 20;
 
 /// True if the key is down, false otherwise.
 bool KEY_STATE[3][3];
 bool HAS_PRESSED = false;
-int LAST_DICE_ROLL = -1;
-
-const int ROW_PINS[] = {12, 11, 10};
-const int NUM_ROWS = sizeof(ROW_PINS) / sizeof(ROW_PINS[0]);
-
-const int COL_PINS[] = {6, 5, 4};
-const int NUM_COLS = sizeof(COL_PINS) / sizeof(COL_PINS[0]);
 
 void initializeDisplay() {
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
@@ -85,24 +62,6 @@ void readRowState(int col) {
     }
 }
 
-void printKBState() {
-    for(int row = 0; row < NUM_ROWS; row++) {
-        for (int col = 0; col < NUM_COLS; col++) {
-            if (KEY_STATE[row][col]) {
-                display.print(1);
-            } else {
-                display.print(0);
-            }
-            display.print(F(" "));
-        }
-        display.println();
-    }
-}
-
-int rollDice(int size) {
-    return (rand() % size) + 1;
-}
-
 void setup() {
     Serial.begin(9600);
 
@@ -115,15 +74,24 @@ void loop() {
     display.clearDisplay();
     display.setCursor(0, 0);
 
-    HAS_PRESSED = false;
-    Serial.println("scanning kb");
+    /// What screen should w render?
+    switch (CURRENT_SCREEN) {
+        case SCREEN_DEBUG:
+            render_debug_screen(&display, KEY_STATE); break;
+        case SCREEN_HOME:
+            render_home_screen(&display); break;
+        case SCREEN_ROLL:
+            render_roll_screen(&display, KEY_STATE); break;
+    }
 
+    /// Run keyboard scan
+    Serial.println("scanning kb");
+    HAS_PRESSED = false;
     for(int col = 0; col < NUM_COLS; col++) {
         // Select column
         pinMode(COL_PINS[col], OUTPUT);
         digitalWrite(COL_PINS[col], HIGH);
         // Check each row
-        Serial.println("read row state");
         readRowState(col);
         digitalWrite(COL_PINS[col], LOW);
         pinMode(COL_PINS[col], INPUT);
@@ -131,34 +99,16 @@ void loop() {
         delay(SCAN_DELAY_MS);
     }
 
-    Serial.println("drawing state");
-    printKBState();
-
-    // Any keys pressed?
-    if (HAS_PRESSED) {
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLS; col++) {
-                if (KEY_STATE[row][col]) {
-                    int size = 0;
-                    switch (KEY_MATRIX[row][col]) {
-                        case KEY_D4: size = 4; break;
-                        case KEY_D6: size = 6; break;
-                        case KEY_D8: size = 8; break;
-                        case KEY_D10: size = 10; break;
-                        case KEY_D12: size = 12; break;
-                        case KEY_D20: size = 20; break;
-                        default: size = 100;
-                    }
-                    LAST_DICE_ROLL = rollDice(size);
-                }
-            }
+    /// Handle screen change
+    if (HAS_PRESSED && KEY_STATE[2][2]) {
+        switch (CURRENT_SCREEN) {
+            case SCREEN_HOME:
+                CURRENT_SCREEN = SCREEN_ROLL; break;
+            case SCREEN_ROLL:
+                CURRENT_SCREEN = SCREEN_DEBUG; break;
+            case SCREEN_DEBUG:
+                CURRENT_SCREEN = SCREEN_HOME; break;
         }
-    }
-
-    if (LAST_DICE_ROLL > 0) {
-        display.println(LAST_DICE_ROLL);
-    } else {
-        display.println(F("No dice"));
     }
 
     display.display();
