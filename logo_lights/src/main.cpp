@@ -13,8 +13,7 @@
 #define BUILT_IN_LED_PIN 1
 #define LED_PIN 1
 
-//#define NUM_LEDS 7
-#define NUM_LEDS 1
+#define NUM_LEDS 7
 #define DATA_PIN 2
 #define DELAY_MS 500
 
@@ -49,15 +48,22 @@ void notFound(AsyncWebServerRequest *request) {
     request->send(404, "text/plain", "Not found");
 }
 
+void alertColor(CRGB::HTMLColorCode color) {
+    leds[0] = color;
+    for (int i = 1; i < NUM_LEDS; i++) {
+        leds[i] = CRGB::Black;
+    }
+    FastLED.show();
+}
+
 void changeColor(CRGB::HTMLColorCode color) {
     for (int i = 0; i < NUM_LEDS; i++) {
         leds[i] = color;
     }
     FastLED.show();
-    delay(DELAY_MS);
 }
 
-void blink(CRGB::HTMLColorCode color, int delay_ms = 1000) {
+void blink(CRGB::HTMLColorCode color, int delay_ms = DELAY_MS) {
     changeColor(color);
     delay(delay_ms);
     changeColor(CRGB::Black);
@@ -76,7 +82,7 @@ void disco() {
 void setup() {
     // Setup LEDs
     FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);
-    changeColor(CRGB::White);
+    alertColor(CRGB::White);
 
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
@@ -100,12 +106,14 @@ void setup() {
 
     server.on("/color/red", HTTP_GET, [](AsyncWebServerRequest *req) {
         req->send(200, "text/plain", "Done.");
+        DISCO_MODE = false;
         baseColor = CRGB::Red;
     });
 
     server.on("/color/purp", HTTP_GET, [](AsyncWebServerRequest *req) {
         req->send(200, "text/plain", "Done.");
-        baseColor = CRGB::BlueViolet;
+        DISCO_MODE = false;
+        baseColor = CRGB::Indigo;
     });
 
     server.onNotFound(notFound);
@@ -117,9 +125,12 @@ void loop() {
         if (DISCO_MODE) {
             disco();
         } else {
-            blink(baseColor);
+            changeColor(baseColor);
         }
     } else {
-        blink(CRGB::Red);
+        alertColor(CRGB::Red);
+        delay(DELAY_MS);
+        alertColor(CRGB::Black);
+        delay(DELAY_MS);
     }
 }
