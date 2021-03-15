@@ -211,19 +211,6 @@ F 3 "~" H 8000 4150 50  0001 C CNN
 	1    8000 4150
 	0    -1   -1   0   
 $EndComp
-$Comp
-L power:GND #PWR0101
-U 1 1 604A74FE
-P 6800 4800
-F 0 "#PWR0101" H 6800 4550 50  0001 C CNN
-F 1 "GND" H 6805 4627 50  0000 C CNN
-F 2 "" H 6800 4800 50  0001 C CNN
-F 3 "" H 6800 4800 50  0001 C CNN
-	1    6800 4800
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6800 4700 6800 4800
 Wire Wire Line
 	5600 2500 5600 3250
 Connection ~ 5600 3250
@@ -327,8 +314,6 @@ Wire Wire Line
 Wire Wire Line
 	5600 2500 5600 2050
 Connection ~ 5600 2500
-Wire Wire Line
-	6800 4700 8650 4700
 $Comp
 L dnd_keeb:OLED_326 U1
 U 1 1 60537754
@@ -338,7 +323,7 @@ F 1 "OLED_326" H 3800 3050 50  0000 L CNN
 F 2 "Display:Adafruit_SSD1306" H 3800 3550 50  0001 C CNN
 F 3 "" H 3800 3550 50  0001 C CNN
 	1    3950 3250
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 Text GLabel 3700 2600 1    50   Input ~ 0
 VIN
@@ -382,9 +367,9 @@ Text GLabel 6500 2050 0    50   Input ~ 0
 COL2
 Text GLabel 7400 2050 0    50   Input ~ 0
 COL3
-Text GLabel 2450 2650 2    50   Input ~ 0
+Text GLabel 2550 2650 2    50   Input ~ 0
 VIN
-Text GLabel 2450 2750 2    50   Input ~ 0
+Text GLabel 2950 2750 2    50   Input ~ 0
 GND
 Text GLabel 2450 3050 2    50   Input ~ 0
 SDA
@@ -419,11 +404,40 @@ Text GLabel 4000 2600 1    50   Input ~ 0
 RST
 Wire Wire Line
 	4000 2600 4000 2850
-Wire Wire Line
-	5300 4700 6800 4700
-Connection ~ 6800 4700
 Text Label 3600 2750 0    50   ~ 0
 GND
-Text Label 2400 2750 0    50   ~ 0
-GND
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 604EE7B6
+P 2500 2650
+F 0 "#FLG0101" H 2500 2725 50  0001 C CNN
+F 1 "PWR_FLAG" H 2500 2823 50  0000 C CNN
+F 2 "" H 2500 2650 50  0001 C CNN
+F 3 "~" H 2500 2650 50  0001 C CNN
+	1    2500 2650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 2650 2500 2650
+Connection ~ 2500 2650
+Wire Wire Line
+	2500 2650 2550 2650
+Wire Wire Line
+	5300 4700 8650 4700
+Wire Wire Line
+	2450 2750 2850 2750
+$Comp
+L power:PWR_FLAG #FLG?
+U 1 1 604FEE5E
+P 2850 2750
+F 0 "#FLG?" H 2850 2825 50  0001 C CNN
+F 1 "PWR_FLAG" H 2850 2923 50  0000 C CNN
+F 2 "" H 2850 2750 50  0001 C CNN
+F 3 "~" H 2850 2750 50  0001 C CNN
+	1    2850 2750
+	1    0    0    -1  
+$EndComp
+Connection ~ 2850 2750
+Wire Wire Line
+	2850 2750 2950 2750
 $EndSCHEMATC
