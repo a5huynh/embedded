@@ -325,20 +325,18 @@ F 3 "" H 3800 3550 50  0001 C CNN
 	1    3950 3250
 	1    0    0    -1  
 $EndComp
-Text GLabel 3700 2600 1    50   Input ~ 0
+Text GLabel 4200 2600 1    50   Input ~ 0
 VIN
-Text GLabel 3600 2600 1    50   Input ~ 0
-GND
-NoConn ~ 3800 2850
 Text GLabel 4300 2600 1    50   Input ~ 0
+GND
+Text GLabel 3600 2600 1    50   Input ~ 0
 SDA
 Wire Wire Line
 	4300 2600 4300 2850
-Text GLabel 4200 2600 1    50   Input ~ 0
+Text GLabel 3700 2600 1    50   Input ~ 0
 SCL
 Wire Wire Line
 	4200 2600 4200 2850
-NoConn ~ 3900 2850
 NoConn ~ 4100 2850
 Text GLabel 5300 4700 0    50   Input ~ 0
 GND
@@ -371,7 +369,7 @@ Text GLabel 2550 2650 2    50   Input ~ 0
 VIN
 Text GLabel 2950 2750 2    50   Input ~ 0
 GND
-Text GLabel 2450 3050 2    50   Input ~ 0
+Text GLabel 2450 2850 2    50   Input ~ 0
 SDA
 Text GLabel 2450 2950 2    50   Input ~ 0
 SCL
@@ -398,13 +396,11 @@ F 3 "~" H 2250 3150 50  0001 C CNN
 	1    2250 3150
 	-1   0    0    1   
 $EndComp
-Text GLabel 2450 2850 2    50   Input ~ 0
+Text GLabel 2450 3050 2    50   Input ~ 0
 RST
-Text GLabel 4000 2600 1    50   Input ~ 0
+Text GLabel 3900 2600 1    50   Input ~ 0
 RST
-Wire Wire Line
-	4000 2600 4000 2850
-Text Label 3600 2750 0    50   ~ 0
+Text Label 4300 2800 0    50   ~ 0
 GND
 $Comp
 L power:PWR_FLAG #FLG0101
@@ -427,10 +423,10 @@ Wire Wire Line
 Wire Wire Line
 	2450 2750 2850 2750
 $Comp
-L power:PWR_FLAG #FLG?
+L power:PWR_FLAG #FLG0102
 U 1 1 604FEE5E
 P 2850 2750
-F 0 "#FLG?" H 2850 2825 50  0001 C CNN
+F 0 "#FLG0102" H 2850 2825 50  0001 C CNN
 F 1 "PWR_FLAG" H 2850 2923 50  0000 C CNN
 F 2 "" H 2850 2750 50  0001 C CNN
 F 3 "~" H 2850 2750 50  0001 C CNN
@@ -440,4 +436,8 @@ $EndComp
 Connection ~ 2850 2750
 Wire Wire Line
 	2850 2750 2950 2750
+Wire Wire Line
+	3900 2850 3900 2600
+NoConn ~ 4000 2850
+NoConn ~ 3800 2850
 $EndSCHEMATC
