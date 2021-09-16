@@ -350,8 +350,6 @@ F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/40002016A.pdf" H 5300 2450 
 	1    5300 2450
 	1    0    0    -1  
 $EndComp
-Text GLabel 4700 2050 0    50   Input ~ 0
-RST
 Text GLabel 5300 850  1    50   Input ~ 0
 VCC
 Text GLabel 5300 3850 0    50   Input ~ 0
@@ -397,7 +395,6 @@ Text GLabel 5900 2250 2    50   Input ~ 0
 ROW2
 Text GLabel 5900 2350 2    50   Input ~ 0
 ROW3
-NoConn ~ 4700 1250
 NoConn ~ 4700 1450
 NoConn ~ 4700 1550
 NoConn ~ 4700 1650
@@ -416,7 +413,6 @@ NoConn ~ 4700 3250
 NoConn ~ 4700 3350
 NoConn ~ 4700 3450
 NoConn ~ 4700 3550
-NoConn ~ 5900 1950
 NoConn ~ 5900 2850
 NoConn ~ 5900 2950
 NoConn ~ 5900 3050
@@ -543,12 +539,8 @@ Wire Wire Line
 	2850 2200 3000 2200
 NoConn ~ 2700 3550
 NoConn ~ 2900 3550
-Wire Wire Line
-	2800 3550 2800 3300
 Text Label 3200 3500 0    50   ~ 0
 GND
-Text GLabel 2800 3300 1    50   Input ~ 0
-RST
 Wire Wire Line
 	2600 3300 2600 3550
 Wire Wire Line
@@ -565,14 +557,14 @@ SDA
 Text GLabel 3200 3300 1    50   Input ~ 0
 GND
 Text GLabel 3100 3300 1    50   Input ~ 0
-3v3
+VCC
 $Comp
 L dnd_keeb:OLED_326 U1
 U 1 1 60537754
 P 2850 3950
 F 0 "U1" H 2800 3900 50  0000 L CNN
 F 1 "OLED_326" H 2700 3750 50  0000 L CNN
-F 2 "dnd_keeb:Adafruit_326" H 2700 4250 50  0000 C CNN
+F 2 "dnd_keeb:Adafruit_326" H 2900 3500 50  0000 C CNN
 F 3 "" H 2700 4250 50  0001 C CNN
 	1    2850 3950
 	1    0    0    -1  
@@ -624,16 +616,8 @@ Wire Wire Line
 Connection ~ 1650 1550
 Wire Wire Line
 	1650 1550 1950 1550
-Text GLabel 6900 850  0    50   Input ~ 0
-MISO
-Text GLabel 6900 950  0    50   Input ~ 0
-SCK
-Text GLabel 6900 1050 0    50   Input ~ 0
-RST
 Text GLabel 7400 850  2    50   Input ~ 0
 VCC
-Text GLabel 7400 950  2    50   Input ~ 0
-MOSI
 Text GLabel 7400 1050 2    50   Input ~ 0
 GND
 $Comp
@@ -656,7 +640,7 @@ MISO
 Text GLabel 5900 1850 2    50   Input ~ 0
 SCK
 Wire Wire Line
-	5300 1050 5300 950 
+	5300 1050 5300 1000
 $Comp
 L power:PWR_FLAG #FLG0101
 U 1 1 60A51F08
@@ -677,4 +661,63 @@ Wire Wire Line
 	7400 1150 7400 1250
 Wire Wire Line
 	7400 1250 5900 1250
+NoConn ~ 2800 3550
+Text GLabel 4700 1250 0    50   Input ~ 0
+UPDI
+Text GLabel 7400 950  2    50   Input ~ 0
+UPDI
+Text GLabel 6900 850  0    50   Input ~ 0
+MOSI
+Text GLabel 6900 950  0    50   Input ~ 0
+MISO
+Text GLabel 6900 1050 0    50   Input ~ 0
+SCK
+NoConn ~ 5900 1950
+$Comp
+L Switch:SW_Push SW10
+U 1 1 60B3D6A9
+P 4000 2050
+F 0 "SW10" H 4000 2335 50  0000 C CNN
+F 1 "SW_Push" H 4000 2250 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_PUSH_6mm" H 4000 2250 50  0001 C CNN
+F 3 "~" H 4000 2250 50  0001 C CNN
+	1    4000 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4700 2050 4350 2050
+$Comp
+L power:GND #PWR04
+U 1 1 60B426F8
+P 3800 2050
+F 0 "#PWR04" H 3800 1800 50  0001 C CNN
+F 1 "GND" H 3805 1877 50  0000 C CNN
+F 2 "" H 3800 2050 50  0001 C CNN
+F 3 "" H 3800 2050 50  0001 C CNN
+	1    3800 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 2050 4350 1850
+Connection ~ 4350 2050
+Wire Wire Line
+	4350 2050 4200 2050
+$Comp
+L Device:R R5
+U 1 1 60B451B4
+P 4350 1700
+F 0 "R5" H 4420 1746 50  0000 L CNN
+F 1 "330" H 4420 1655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 4280 1700 50  0001 C CNN
+F 3 "~" H 4350 1700 50  0001 C CNN
+	1    4350 1700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 1550 4350 1000
+Wire Wire Line
+	4350 1000 5300 1000
+Connection ~ 5300 1000
+Wire Wire Line
+	5300 1000 5300 950 
 $EndSCHEMATC
